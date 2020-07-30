@@ -10,7 +10,7 @@ screen_height = 640  # 세로크기
 screen = pygame.display.set_mode((screen_width, screen_height))  # (()) 2개씩 필요, 튜플 형식으로 저장하는 것임
 
 # setting screen title
-pygame.display.set_caption("똥 피하기")
+pygame.display.set_caption("avoid shits")
 
 # FPS
 clock = pygame.time.Clock()
