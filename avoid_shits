@@ -1,0 +1,84 @@
+import pygame
+
+############################################################
+# intialization
+pygame.init()
+
+# setting screen size
+screen_width = 480  # 가로크기
+screen_height = 640  # 세로크기
+screen = pygame.display.set_mode((screen_width, screen_height))  # (()) 2개씩 필요, 튜플 형식으로 저장하는 것임
+
+# setting screen title
+pygame.display.set_caption("똥 피하기")
+
+# FPS
+clock = pygame.time.Clock()
+############################################################
+# 1. initialize custom game (background, game image, coordinate, speed, font etc.)
+
+background = pygame.image.load("C:/Users/park6/PycharmProjects/MyFirstGame/pygame_basic/background.png")
+
+#character information
+character = pygame.image.load("C:/Users/park6/PycharmProjects/MyFirstGame/pygame_basic/main.png")
+character_size = character.get_rect().size
+character_width = character_size[0] #put the width length
+character_height = character_size[1] #put the height length
+character_x_pos = (screen_width - character_width) / 2
+character_y_pos = screen_height - character_height
+
+char_to_x = 0
+char_to_y = 0
+char_speed = 1
+
+
+running = True  # Is the game in progress?
+while running:
+    dt = clock.tick(30)
+
+    # 2. event processing (keyboard, mouse etc.)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:  # Has a window closing event occured?  / QUIT must be upper
+            running = False  # game is not in progress
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                char_to_x -= char_speed
+            elif event.key == pygame.K_RIGHT:
+                char_to_x += char_speed
+            elif event.key == pygame.K_UP:
+                char_to_y -= char_speed
+            elif event.key == pygame.K_DOWN:
+                char_to_y += char_speed
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                char_to_x = 0
+            elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                char_to_y = 0
+
+    # 3. define the location of the game character(The reason for multiplying dt is to suppress speed changes as frames change)
+    character_x_pos += char_to_x * dt #현재 위치에서 키보드를 움직인 만큼 이동, x축 (변화량을 대입하기 때문에 = 가 아니라 +=)
+    character_y_pos += char_to_y * dt#현재 위치에서 키보드를 움직인 만큼 이동, y축 (변화량을 대입하기 때문에 = 가 아니라 +=)
+
+    if character_x_pos < 0:
+        character_x_pos = 0
+    elif character_x_pos > screen_width - character_width:
+        character_x_pos = screen_width - character_width
+    elif character_y_pos < 0:
+        character_y_pos = 0
+    elif character_y_pos > screen_height - character_height:
+        character_y_pos = screen_height - character_height
+
+
+
+    # 4. collision processing
+
+    # 5. draw on screen
+
+    screen.blit(background, (0, 0))
+    screen.blit(character, (character_x_pos, character_y_pos)) #drawing character
+
+    pygame.display.update()
+
+pygame.quit()
